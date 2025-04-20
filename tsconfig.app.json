@@ -1,0 +1,28 @@
+// tsconfig.app.json
+{
+  "extends": "./tsconfig.json", // Наследуем (включая noEmit: true)
+  "compilerOptions": {
+    "composite": true,
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+
+    // "noEmit": true, // Наследуется
+
+    /* --- ДОБАВЛЯЕМ ОПЦИИ ДЕКЛАРАЦИЙ --- */
+    // Явно указываем, что генерировать ТОЛЬКО декларации.
+    // Это может удовлетворить требование "may not disable emit",
+    // так как генерация деклараций - это тоже форма "emit".
+    "declaration": true,
+    "declarationMap": true, // Не обязательно, но полезно
+    "emitDeclarationOnly": true
+
+  },
+  "include": [
+    "vite-env.d.ts", // Проверьте имя файла
+    "src/**/*"
+  ],
+  "exclude": [
+    "src/**/__tests__/*",
+    "node_modules",
+    "dist"
+  ]
+}

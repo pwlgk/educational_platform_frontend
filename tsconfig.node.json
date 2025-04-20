@@ -1,0 +1,28 @@
+// tsconfig.node.json
+{
+  "extends": "./tsconfig.json", // Наследуем базу (теперь без noEmit)
+  "compilerOptions": {
+    "composite": true,
+    // "noEmit": undefined, // Явно отменяем возможное наследование noEmit: true (если оно было)
+    // или просто не указываем noEmit
+
+    // Явно указываем, что генерировать ТОЛЬКО декларации
+    "declaration": true,
+    "declarationMap": true, // Source maps для деклараций
+    "emitDeclarationOnly": true,
+
+    // Опции для Node.js
+    "module": "ESNext",
+    "moduleResolution": "Node", // или NodeNext
+    "types": ["node"],
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "sourceMap": true
+  },
+  "include": [
+    "vite.config.ts",
+    ".eslintrc.cjs", // Пример
+    "postcss.config.cjs", // Если есть
+    "tailwind.config.cjs"  // Если есть
+  ]
+}

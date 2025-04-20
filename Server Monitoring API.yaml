@@ -1,0 +1,4828 @@
+openapi: 3.0.3
+info:
+  title: Server Monitoring API
+  version: 1.0.0
+  description: API для мониторинга и управления сервером
+paths:
+  /api/forum/categories/:
+    get:
+      operationId: forum_categories_list
+      description: Просмотр категорий форума.
+      tags:
+      - forum
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ForumCategory'
+          description: ''
+  /api/forum/categories/{slug}/:
+    get:
+      operationId: forum_categories_retrieve
+      description: Просмотр категорий форума.
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+          title: Слаг
+          description: Оставьте пустым для авто-генерации
+        required: true
+      tags:
+      - forum
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForumCategory'
+          description: ''
+  /api/forum/posts/:
+    get:
+      operationId: forum_posts_list
+      description: CRUD для постов форума (просмотр, создание, редактирование, удаление,
+        лайки).
+      tags:
+      - forum
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ForumPost'
+          description: ''
+    post:
+      operationId: forum_posts_create
+      description: CRUD для постов форума (просмотр, создание, редактирование, удаление,
+        лайки).
+      tags:
+      - forum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForumPostRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ForumPostRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ForumPostRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForumPost'
+          description: ''
+  /api/forum/posts/{id}/:
+    get:
+      operationId: forum_posts_retrieve
+      description: CRUD для постов форума (просмотр, создание, редактирование, удаление,
+        лайки).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this пост форума.
+        required: true
+      tags:
+      - forum
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForumPost'
+          description: ''
+    put:
+      operationId: forum_posts_update
+      description: CRUD для постов форума (просмотр, создание, редактирование, удаление,
+        лайки).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this пост форума.
+        required: true
+      tags:
+      - forum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForumPostRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ForumPostRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ForumPostRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForumPost'
+          description: ''
+    patch:
+      operationId: forum_posts_partial_update
+      description: CRUD для постов форума (просмотр, создание, редактирование, удаление,
+        лайки).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this пост форума.
+        required: true
+      tags:
+      - forum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedForumPostRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedForumPostRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedForumPostRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForumPost'
+          description: ''
+    delete:
+      operationId: forum_posts_destroy
+      description: CRUD для постов форума (просмотр, создание, редактирование, удаление,
+        лайки).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this пост форума.
+        required: true
+      tags:
+      - forum
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/forum/posts/{id}/like/:
+    post:
+      operationId: forum_posts_like_create
+      description: CRUD для постов форума (просмотр, создание, редактирование, удаление,
+        лайки).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this пост форума.
+        required: true
+      tags:
+      - forum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForumPostRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ForumPostRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ForumPostRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForumPost'
+          description: ''
+    delete:
+      operationId: forum_posts_like_destroy
+      description: CRUD для постов форума (просмотр, создание, редактирование, удаление,
+        лайки).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this пост форума.
+        required: true
+      tags:
+      - forum
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/forum/topics/:
+    get:
+      operationId: forum_topics_list
+      description: CRUD для тем форума.
+      parameters:
+      - in: query
+        name: author
+        schema:
+          type: integer
+      - in: query
+        name: category__slug
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: tags__name
+        schema:
+          type: string
+      tags:
+      - forum
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ForumTopicList'
+          description: ''
+    post:
+      operationId: forum_topics_create
+      description: CRUD для тем форума.
+      tags:
+      - forum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForumTopicRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ForumTopicRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ForumTopicRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForumTopic'
+          description: ''
+  /api/forum/topics/{id}/:
+    get:
+      operationId: forum_topics_retrieve
+      description: CRUD для тем форума.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this тема форума.
+        required: true
+      tags:
+      - forum
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForumTopic'
+          description: ''
+    put:
+      operationId: forum_topics_update
+      description: CRUD для тем форума.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this тема форума.
+        required: true
+      tags:
+      - forum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForumTopicRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ForumTopicRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ForumTopicRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForumTopic'
+          description: ''
+    patch:
+      operationId: forum_topics_partial_update
+      description: CRUD для тем форума.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this тема форума.
+        required: true
+      tags:
+      - forum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedForumTopicRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedForumTopicRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedForumTopicRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForumTopic'
+          description: ''
+    delete:
+      operationId: forum_topics_destroy
+      description: CRUD для тем форума.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this тема форума.
+        required: true
+      tags:
+      - forum
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/forum/topics/{id}/close/:
+    post:
+      operationId: forum_topics_close_create
+      description: Закрыть/открыть тему.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this тема форума.
+        required: true
+      tags:
+      - forum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForumTopicRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ForumTopicRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ForumTopicRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForumTopic'
+          description: ''
+  /api/forum/topics/{id}/pin/:
+    post:
+      operationId: forum_topics_pin_create
+      description: Закрепить/открепить тему.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this тема форума.
+        required: true
+      tags:
+      - forum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForumTopicRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ForumTopicRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ForumTopicRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForumTopic'
+          description: ''
+  /api/messaging/chats/:
+    get:
+      operationId: messaging_chats_list
+      description: Управление чатами (список, создание, детали).
+      tags:
+      - messaging
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Chat'
+          description: ''
+    post:
+      operationId: messaging_chats_create
+      description: Управление чатами (список, создание, детали).
+      tags:
+      - messaging
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chat'
+          description: ''
+  /api/messaging/chats/{chat_pk}/messages/:
+    get:
+      operationId: messaging_chats_messages_list
+      description: Просмотр и отправка сообщений в конкретном чате.
+      parameters:
+      - in: path
+        name: chat_pk
+        schema:
+          type: integer
+          title: Чат
+        required: true
+      tags:
+      - messaging
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+          description: ''
+    post:
+      operationId: messaging_chats_messages_create
+      description: Просмотр и отправка сообщений в конкретном чате.
+      parameters:
+      - in: path
+        name: chat_pk
+        schema:
+          type: integer
+          title: Чат
+        required: true
+      tags:
+      - messaging
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MessageRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MessageRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+          description: ''
+  /api/messaging/chats/{chat_pk}/messages/{id}/:
+    get:
+      operationId: messaging_chats_messages_retrieve
+      description: Просмотр и отправка сообщений в конкретном чате.
+      parameters:
+      - in: path
+        name: chat_pk
+        schema:
+          type: integer
+          title: Чат
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this сообщение.
+        required: true
+      tags:
+      - messaging
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+          description: ''
+    put:
+      operationId: messaging_chats_messages_update
+      description: Просмотр и отправка сообщений в конкретном чате.
+      parameters:
+      - in: path
+        name: chat_pk
+        schema:
+          type: integer
+          title: Чат
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this сообщение.
+        required: true
+      tags:
+      - messaging
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MessageRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MessageRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+          description: ''
+    patch:
+      operationId: messaging_chats_messages_partial_update
+      description: Просмотр и отправка сообщений в конкретном чате.
+      parameters:
+      - in: path
+        name: chat_pk
+        schema:
+          type: integer
+          title: Чат
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this сообщение.
+        required: true
+      tags:
+      - messaging
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedMessageRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedMessageRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedMessageRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+          description: ''
+    delete:
+      operationId: messaging_chats_messages_destroy
+      description: Просмотр и отправка сообщений в конкретном чате.
+      parameters:
+      - in: path
+        name: chat_pk
+        schema:
+          type: integer
+          title: Чат
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this сообщение.
+        required: true
+      tags:
+      - messaging
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/messaging/chats/{id}/:
+    get:
+      operationId: messaging_chats_retrieve
+      description: Управление чатами (список, создание, детали).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - messaging
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chat'
+          description: ''
+    put:
+      operationId: messaging_chats_update
+      description: Управление чатами (список, создание, детали).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - messaging
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chat'
+          description: ''
+    patch:
+      operationId: messaging_chats_partial_update
+      description: Управление чатами (список, создание, детали).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - messaging
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedChatRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedChatRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedChatRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chat'
+          description: ''
+    delete:
+      operationId: messaging_chats_destroy
+      description: Управление чатами (список, создание, детали).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - messaging
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/messaging/chats/{id}/add_participant/:
+    post:
+      operationId: messaging_chats_add_participant_create
+      description: Управление чатами (список, создание, детали).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - messaging
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chat'
+          description: ''
+  /api/messaging/chats/{id}/mark-read/:
+    post:
+      operationId: messaging_chats_mark_read_create
+      description: Управление чатами (список, создание, детали).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - messaging
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chat'
+          description: ''
+  /api/messaging/chats/{id}/remove_participant/:
+    post:
+      operationId: messaging_chats_remove_participant_create
+      description: Управление чатами (список, создание, детали).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - messaging
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chat'
+          description: ''
+  /api/monitor/command/:
+    post:
+      operationId: monitor_command_create
+      description: |-
+        Выполнить разрешенную команду на сервере.
+        Требует прав суперпользователя.
+      tags:
+      - Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommandRequestRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CommandRequestRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CommandRequestRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommandResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /api/monitor/logs/:
+    get:
+      operationId: monitor_logs_retrieve
+      description: Получить последние N строк лог-файла по его псевдониму.
+      parameters:
+      - in: query
+        name: lines
+        schema:
+          type: integer
+          default: 50
+        description: Количество последних строк для отображения
+      - in: query
+        name: log_alias
+        schema:
+          type: string
+        description: Псевдоним лог-файла (из настроек MONITOR_LOG_FILES)
+        required: true
+      tags:
+      - Logging
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /api/monitor/processes/:
+    get:
+      operationId: monitor_processes_retrieve
+      description: Получить список процессов.
+      tags:
+      - Process Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/monitor/processes/{pid}/:
+    post:
+      operationId: monitor_processes_create
+      description: |-
+        Выполнить действие над процессом (terminate/kill).
+        Требует прав суперпользователя.
+      parameters:
+      - in: path
+        name: pid
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Process Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProcessActionRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProcessActionRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProcessActionRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessActionResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /api/monitor/services/:
+    get:
+      operationId: monitor_services_retrieve
+      description: Получить список служб (systemd).
+      tags:
+      - Service Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/monitor/services/{service_name}/{action}/:
+    post:
+      operationId: monitor_services_create
+      description: |-
+        Выполнить действие (start, stop, restart, status) над службой.
+        Требует прав суперпользователя и настроенного sudo/polkit.
+      parameters:
+      - in: path
+        name: action
+        schema:
+          type: string
+          enum:
+          - restart
+          - start
+          - status
+          - stop
+        description: Действие над службой
+        required: true
+      - in: path
+        name: service_name
+        schema:
+          type: string
+        description: Имя службы
+        required: true
+      tags:
+      - Service Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceActionResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /api/monitor/system/:
+    get:
+      operationId: monitor_system_retrieve
+      description: Получить текущие системные метрики.
+      tags:
+      - Monitoring
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/news/articles/:
+    get:
+      operationId: news_articles_list
+      description: CRUD для новостей.
+      parameters:
+      - in: query
+        name: author
+        schema:
+          type: integer
+      - in: query
+        name: category__slug
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - news
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NewsArticle'
+          description: ''
+    post:
+      operationId: news_articles_create
+      description: CRUD для новостей.
+      tags:
+      - news
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewsArticleRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewsArticleRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/NewsArticleRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsArticle'
+          description: ''
+  /api/news/articles/{id}/:
+    get:
+      operationId: news_articles_retrieve
+      description: CRUD для новостей.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this новость.
+        required: true
+      tags:
+      - news
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsArticle'
+          description: ''
+    put:
+      operationId: news_articles_update
+      description: CRUD для новостей.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this новость.
+        required: true
+      tags:
+      - news
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewsArticleRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewsArticleRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/NewsArticleRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsArticle'
+          description: ''
+    patch:
+      operationId: news_articles_partial_update
+      description: CRUD для новостей.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this новость.
+        required: true
+      tags:
+      - news
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedNewsArticleRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedNewsArticleRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedNewsArticleRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsArticle'
+          description: ''
+    delete:
+      operationId: news_articles_destroy
+      description: CRUD для новостей.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this новость.
+        required: true
+      tags:
+      - news
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/news/articles/{id}/comments/:
+    get:
+      operationId: news_articles_comments_retrieve
+      description: Получение комментариев первого уровня для статьи.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this новость.
+        required: true
+      tags:
+      - news
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsArticle'
+          description: ''
+  /api/news/articles/{id}/comments/add/:
+    post:
+      operationId: news_articles_comments_add_create
+      description: Добавление комментария к статье.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this новость.
+        required: true
+      tags:
+      - news
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewsArticleRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewsArticleRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/NewsArticleRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsArticle'
+          description: ''
+  /api/news/articles/{id}/like/:
+    post:
+      operationId: news_articles_like_create
+      description: CRUD для новостей.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this новость.
+        required: true
+      tags:
+      - news
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewsArticleRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewsArticleRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/NewsArticleRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsArticle'
+          description: ''
+    delete:
+      operationId: news_articles_like_destroy
+      description: CRUD для новостей.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this новость.
+        required: true
+      tags:
+      - news
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/news/categories/:
+    get:
+      operationId: news_categories_list
+      description: CRUD для категорий новостей (только Админы).
+      tags:
+      - news
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NewsCategory'
+          description: ''
+    post:
+      operationId: news_categories_create
+      description: CRUD для категорий новостей (только Админы).
+      tags:
+      - news
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewsCategoryRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewsCategoryRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/NewsCategoryRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsCategory'
+          description: ''
+  /api/news/categories/{slug}/:
+    get:
+      operationId: news_categories_retrieve
+      description: CRUD для категорий новостей (только Админы).
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+          title: Слаг
+          description: Оставьте пустым для авто-генерации
+        required: true
+      tags:
+      - news
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsCategory'
+          description: ''
+    put:
+      operationId: news_categories_update
+      description: CRUD для категорий новостей (только Админы).
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+          title: Слаг
+          description: Оставьте пустым для авто-генерации
+        required: true
+      tags:
+      - news
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewsCategoryRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewsCategoryRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/NewsCategoryRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsCategory'
+          description: ''
+    patch:
+      operationId: news_categories_partial_update
+      description: CRUD для категорий новостей (только Админы).
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+          title: Слаг
+          description: Оставьте пустым для авто-генерации
+        required: true
+      tags:
+      - news
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedNewsCategoryRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedNewsCategoryRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedNewsCategoryRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsCategory'
+          description: ''
+    delete:
+      operationId: news_categories_destroy
+      description: CRUD для категорий новостей (только Админы).
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+          title: Слаг
+          description: Оставьте пустым для авто-генерации
+        required: true
+      tags:
+      - news
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/news/comments/:
+    get:
+      operationId: news_comments_list
+      description: CRUD для комментариев (редактирование/удаление).
+      tags:
+      - news
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NewsComment'
+          description: ''
+    post:
+      operationId: news_comments_create
+      description: CRUD для комментариев (редактирование/удаление).
+      tags:
+      - news
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewsCommentRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewsCommentRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/NewsCommentRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsComment'
+          description: ''
+  /api/news/comments/{id}/:
+    get:
+      operationId: news_comments_retrieve
+      description: CRUD для комментариев (редактирование/удаление).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this комментарий к новости.
+        required: true
+      tags:
+      - news
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsComment'
+          description: ''
+    put:
+      operationId: news_comments_update
+      description: CRUD для комментариев (редактирование/удаление).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this комментарий к новости.
+        required: true
+      tags:
+      - news
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewsCommentRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewsCommentRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/NewsCommentRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsComment'
+          description: ''
+    patch:
+      operationId: news_comments_partial_update
+      description: CRUD для комментариев (редактирование/удаление).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this комментарий к новости.
+        required: true
+      tags:
+      - news
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedNewsCommentRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedNewsCommentRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedNewsCommentRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsComment'
+          description: ''
+    delete:
+      operationId: news_comments_destroy
+      description: CRUD для комментариев (редактирование/удаление).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this комментарий к новости.
+        required: true
+      tags:
+      - news
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/news/comments/{id}/like/:
+    post:
+      operationId: news_comments_like_create
+      description: CRUD для комментариев (редактирование/удаление).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this комментарий к новости.
+        required: true
+      tags:
+      - news
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewsCommentRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewsCommentRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/NewsCommentRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsComment'
+          description: ''
+    delete:
+      operationId: news_comments_like_destroy
+      description: CRUD для комментариев (редактирование/удаление).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this комментарий к новости.
+        required: true
+      tags:
+      - news
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/notifications/list/:
+    get:
+      operationId: notifications_list_list
+      description: Просмотр уведомлений и управление статусом прочтения.
+      tags:
+      - notifications
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notification'
+          description: ''
+  /api/notifications/list/{id}/:
+    get:
+      operationId: notifications_list_retrieve
+      description: Просмотр уведомлений и управление статусом прочтения.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - notifications
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+          description: ''
+  /api/notifications/list/{id}/mark-read/:
+    post:
+      operationId: notifications_list_mark_read_create
+      description: Пометить конкретное уведомление как прочитанное.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - notifications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NotificationRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/NotificationRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+          description: ''
+  /api/notifications/list/{id}/mark-unread/:
+    post:
+      operationId: notifications_list_mark_unread_create
+      description: Пометить конкретное уведомление как непрочитанное.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - notifications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NotificationRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/NotificationRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+          description: ''
+  /api/notifications/list/mark-all-read/:
+    post:
+      operationId: notifications_list_mark_all_read_create
+      description: Пометить все непрочитанные уведомления пользователя как прочитанные.
+      tags:
+      - notifications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NotificationRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/NotificationRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+          description: ''
+  /api/notifications/settings/:
+    get:
+      operationId: notifications_settings_retrieve
+      description: Получение и обновление настроек уведомлений пользователя.
+      tags:
+      - notifications
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserNotificationSettings'
+          description: ''
+    put:
+      operationId: notifications_settings_update
+      description: Получение и обновление настроек уведомлений пользователя.
+      tags:
+      - notifications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserNotificationSettingsRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserNotificationSettingsRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserNotificationSettingsRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserNotificationSettings'
+          description: ''
+    patch:
+      operationId: notifications_settings_partial_update
+      description: Получение и обновление настроек уведомлений пользователя.
+      tags:
+      - notifications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserNotificationSettingsRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserNotificationSettingsRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserNotificationSettingsRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserNotificationSettings'
+          description: ''
+  /api/schedule/classrooms/:
+    get:
+      operationId: schedule_classrooms_list
+      description: CRUD для аудиторий (Админы).
+      parameters:
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: type
+        schema:
+          type: string
+          title: Тип аудитории
+          enum:
+          - COMPUTER
+          - LAB
+          - LECTURE
+          - OTHER
+          - PRACTICE
+        description: |-
+          * `LECTURE` - Лекционная
+          * `PRACTICE` - Практическая
+          * `LAB` - Лаборатория
+          * `COMPUTER` - Компьютерный класс
+          * `OTHER` - Другое
+      tags:
+      - schedule
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Classroom'
+          description: ''
+    post:
+      operationId: schedule_classrooms_create
+      description: CRUD для аудиторий (Админы).
+      tags:
+      - schedule
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClassroomRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ClassroomRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ClassroomRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Classroom'
+          description: ''
+  /api/schedule/classrooms/{id}/:
+    get:
+      operationId: schedule_classrooms_retrieve
+      description: CRUD для аудиторий (Админы).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this аудитория.
+        required: true
+      tags:
+      - schedule
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Classroom'
+          description: ''
+    put:
+      operationId: schedule_classrooms_update
+      description: CRUD для аудиторий (Админы).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this аудитория.
+        required: true
+      tags:
+      - schedule
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClassroomRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ClassroomRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ClassroomRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Classroom'
+          description: ''
+    patch:
+      operationId: schedule_classrooms_partial_update
+      description: CRUD для аудиторий (Админы).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this аудитория.
+        required: true
+      tags:
+      - schedule
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedClassroomRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedClassroomRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedClassroomRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Classroom'
+          description: ''
+    delete:
+      operationId: schedule_classrooms_destroy
+      description: CRUD для аудиторий (Админы).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this аудитория.
+        required: true
+      tags:
+      - schedule
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/schedule/groups/:
+    get:
+      operationId: schedule_groups_list
+      description: CRUD для учебных групп (Админы).
+      parameters:
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - schedule
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StudentGroup'
+          description: ''
+    post:
+      operationId: schedule_groups_create
+      description: CRUD для учебных групп (Админы).
+      tags:
+      - schedule
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentGroupRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StudentGroupRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/StudentGroupRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentGroup'
+          description: ''
+  /api/schedule/groups/{id}/:
+    get:
+      operationId: schedule_groups_retrieve
+      description: CRUD для учебных групп (Админы).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this учебная группа.
+        required: true
+      tags:
+      - schedule
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentGroup'
+          description: ''
+    put:
+      operationId: schedule_groups_update
+      description: CRUD для учебных групп (Админы).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this учебная группа.
+        required: true
+      tags:
+      - schedule
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentGroupRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StudentGroupRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/StudentGroupRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentGroup'
+          description: ''
+    patch:
+      operationId: schedule_groups_partial_update
+      description: CRUD для учебных групп (Админы).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this учебная группа.
+        required: true
+      tags:
+      - schedule
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedStudentGroupRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedStudentGroupRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedStudentGroupRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentGroup'
+          description: ''
+    delete:
+      operationId: schedule_groups_destroy
+      description: CRUD для учебных групп (Админы).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this учебная группа.
+        required: true
+      tags:
+      - schedule
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/schedule/lessons/:
+    get:
+      operationId: schedule_lessons_list
+      description: CRUD для занятий (Админы/Преподаватели).
+      parameters:
+      - in: query
+        name: classroom
+        schema:
+          type: integer
+      - in: query
+        name: end_time
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: end_time__date
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: end_time__gte
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: end_time__lte
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: group
+        schema:
+          type: integer
+      - in: query
+        name: lesson_type
+        schema:
+          type: string
+          title: Тип занятия
+          enum:
+          - CONSULTATION
+          - EXAM
+          - LAB
+          - LECTURE
+          - OTHER
+          - PRACTICE
+          - SEMINAR
+        description: |-
+          * `LECTURE` - Лекция
+          * `PRACTICE` - Практика
+          * `SEMINAR` - Семинар
+          * `LAB` - Лабораторная работа
+          * `EXAM` - Экзамен/Зачет
+          * `CONSULTATION` - Консультация
+          * `OTHER` - Другое
+      - in: query
+        name: lesson_type__in
+        schema:
+          type: array
+          items:
+            type: string
+        description: Несколько значений могут быть разделены запятыми.
+        explode: false
+        style: form
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: start_time
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: start_time__date
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: start_time__gte
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: start_time__lte
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: subject
+        schema:
+          type: integer
+      - in: query
+        name: teacher
+        schema:
+          type: integer
+      tags:
+      - schedule
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Lesson'
+          description: ''
+    post:
+      operationId: schedule_lessons_create
+      description: CRUD для занятий (Админы/Преподаватели).
+      tags:
+      - schedule
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LessonRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LessonRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LessonRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lesson'
+          description: ''
+  /api/schedule/lessons/{id}/:
+    get:
+      operationId: schedule_lessons_retrieve
+      description: CRUD для занятий (Админы/Преподаватели).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this занятие.
+        required: true
+      tags:
+      - schedule
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lesson'
+          description: ''
+    put:
+      operationId: schedule_lessons_update
+      description: CRUD для занятий (Админы/Преподаватели).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this занятие.
+        required: true
+      tags:
+      - schedule
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LessonRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LessonRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LessonRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lesson'
+          description: ''
+    patch:
+      operationId: schedule_lessons_partial_update
+      description: CRUD для занятий (Админы/Преподаватели).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this занятие.
+        required: true
+      tags:
+      - schedule
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedLessonRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedLessonRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedLessonRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lesson'
+          description: ''
+    delete:
+      operationId: schedule_lessons_destroy
+      description: CRUD для занятий (Админы/Преподаватели).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this занятие.
+        required: true
+      tags:
+      - schedule
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/schedule/my-schedule/:
+    get:
+      operationId: schedule_my_schedule_list
+      description: |-
+        Получение расписания для текущего пользователя (Студент, Преподаватель, Родитель).
+        Поддерживает фильтрацию по дате (?start_date=YYYY-MM-DD&end_date=YYYY-MM-DD).
+      tags:
+      - schedule
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScheduleList'
+          description: ''
+  /api/schedule/subjects/:
+    get:
+      operationId: schedule_subjects_list
+      description: CRUD для учебных предметов (только Админы).
+      tags:
+      - schedule
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subject'
+          description: ''
+    post:
+      operationId: schedule_subjects_create
+      description: CRUD для учебных предметов (только Админы).
+      tags:
+      - schedule
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubjectRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubjectRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubjectRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subject'
+          description: ''
+  /api/schedule/subjects/{id}/:
+    get:
+      operationId: schedule_subjects_retrieve
+      description: CRUD для учебных предметов (только Админы).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this предмет.
+        required: true
+      tags:
+      - schedule
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subject'
+          description: ''
+    put:
+      operationId: schedule_subjects_update
+      description: CRUD для учебных предметов (только Админы).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this предмет.
+        required: true
+      tags:
+      - schedule
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubjectRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubjectRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubjectRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subject'
+          description: ''
+    patch:
+      operationId: schedule_subjects_partial_update
+      description: CRUD для учебных предметов (только Админы).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this предмет.
+        required: true
+      tags:
+      - schedule
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSubjectRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSubjectRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSubjectRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subject'
+          description: ''
+    delete:
+      operationId: schedule_subjects_destroy
+      description: CRUD для учебных предметов (только Админы).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this предмет.
+        required: true
+      tags:
+      - schedule
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/users/admin/invitations/:
+    get:
+      operationId: users_admin_invitations_list
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InvitationCode'
+          description: ''
+    post:
+      operationId: users_admin_invitations_create
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvitationCodeRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/InvitationCodeRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/InvitationCodeRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvitationCode'
+          description: ''
+  /api/users/admin/invitations/{id}/:
+    get:
+      operationId: users_admin_invitations_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvitationCode'
+          description: ''
+    put:
+      operationId: users_admin_invitations_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvitationCodeRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/InvitationCodeRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/InvitationCodeRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvitationCode'
+          description: ''
+    patch:
+      operationId: users_admin_invitations_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedInvitationCodeRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedInvitationCodeRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedInvitationCodeRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvitationCode'
+          description: ''
+    delete:
+      operationId: users_admin_invitations_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/users/admin/users/:
+    get:
+      operationId: users_admin_users_list
+      parameters:
+      - in: query
+        name: is_active
+        schema:
+          type: boolean
+      - in: query
+        name: is_role_confirmed
+        schema:
+          type: boolean
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - in: query
+        name: role
+        schema:
+          type: string
+          title: Роль
+          enum:
+          - ADMIN
+          - PARENT
+          - STUDENT
+          - TEACHER
+        description: |-
+          * `STUDENT` - Студент
+          * `TEACHER` - Преподаватель
+          * `PARENT` - Родитель
+          * `ADMIN` - Администратор
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+          description: ''
+  /api/users/admin/users/{id}/:
+    get:
+      operationId: users_admin_users_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this пользователь.
+        required: true
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/users/change-password/:
+    put:
+      operationId: users_change_password_update
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    patch:
+      operationId: users_change_password_partial_update
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedChangePasswordRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedChangePasswordRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedChangePasswordRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/users/confirm/{token}/:
+    get:
+      operationId: users_confirm_retrieve
+      parameters:
+      - in: path
+        name: token
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/users/login/:
+    post:
+      operationId: users_login_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+  /api/users/login/refresh/:
+    post:
+      operationId: users_login_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /api/users/profile/:
+    get:
+      operationId: users_profile_retrieve
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    put:
+      operationId: users_profile_update
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    patch:
+      operationId: users_profile_partial_update
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/users/register/:
+    post:
+      operationId: users_register_create
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistrationRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRegistrationRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRegistrationRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRegistration'
+          description: ''
+  /api/users/users/:
+    get:
+      operationId: users_users_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - in: query
+        name: role
+        schema:
+          type: string
+          title: Роль
+          enum:
+          - ADMIN
+          - PARENT
+          - STUDENT
+          - TEACHER
+        description: |-
+          * `STUDENT` - Студент
+          * `TEACHER` - Преподаватель
+          * `PARENT` - Родитель
+          * `ADMIN` - Администратор
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+          description: ''
+  /api/users/users/{id}/:
+    get:
+      operationId: users_users_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this пользователь.
+        required: true
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+components:
+  schemas:
+    ActionEnum:
+      enum:
+      - terminate
+      - kill
+      type: string
+      description: |-
+        * `terminate` - terminate
+        * `kill` - kill
+    ChangePasswordRequest:
+      type: object
+      properties:
+        old_password:
+          type: string
+          writeOnly: true
+          minLength: 1
+        new_password:
+          type: string
+          writeOnly: true
+          minLength: 1
+        new_password2:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - new_password
+      - new_password2
+      - old_password
+    Chat:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        chat_type:
+          allOf:
+          - $ref: '#/components/schemas/ChatTypeEnum'
+          readOnly: true
+          title: Тип чата
+        name:
+          type: string
+          nullable: true
+          title: Название чата
+          description: Обязательно для групповых чатов
+          maxLength: 150
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Создан
+        participants:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+          readOnly: true
+        last_message_details:
+          allOf:
+          - $ref: '#/components/schemas/Message'
+          readOnly: true
+          nullable: true
+        unread_count:
+          type: integer
+          description: Подсчет непрочитанных сообщений для текущего пользователя.
+          readOnly: true
+        display_name:
+          type: string
+          description: Формирует имя для отображения в списке чатов.
+          readOnly: true
+      required:
+      - chat_type
+      - created_at
+      - display_name
+      - id
+      - last_message_details
+      - participants
+      - unread_count
+    ChatRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+          title: Название чата
+          description: Обязательно для групповых чатов
+          maxLength: 150
+        other_user_id:
+          type: integer
+          writeOnly: true
+          nullable: true
+        participant_ids:
+          type: array
+          items:
+            type: integer
+          writeOnly: true
+          nullable: true
+    ChatTypeEnum:
+      enum:
+      - PRIVATE
+      - GROUP
+      type: string
+      description: |-
+        * `PRIVATE` - Личный чат
+        * `GROUP` - Групповой чат
+    Classroom:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        identifier:
+          type: string
+          title: Номер/название
+          maxLength: 50
+        capacity:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          title: Вместимость
+        type:
+          allOf:
+          - $ref: '#/components/schemas/TypeEnum'
+          title: Тип аудитории
+        notes:
+          type: string
+          title: Примечания
+      required:
+      - id
+      - identifier
+    ClassroomRequest:
+      type: object
+      properties:
+        identifier:
+          type: string
+          minLength: 1
+          title: Номер/название
+          maxLength: 50
+        capacity:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          title: Вместимость
+        type:
+          allOf:
+          - $ref: '#/components/schemas/TypeEnum'
+          title: Тип аудитории
+        notes:
+          type: string
+          title: Примечания
+      required:
+      - identifier
+    CommandRequestRequest:
+      type: object
+      properties:
+        command:
+          type: string
+          minLength: 1
+      required:
+      - command
+    CommandResponse:
+      type: object
+      properties:
+        command:
+          type: string
+        stdout:
+          type: string
+        stderr:
+          type: string
+        returncode:
+          type: integer
+      required:
+      - command
+      - returncode
+      - stderr
+      - stdout
+    ForumAuthor:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        first_name:
+          type: string
+          title: Имя
+          maxLength: 150
+        last_name:
+          type: string
+          title: Фамилия
+          maxLength: 150
+        profile:
+          $ref: '#/components/schemas/Profile'
+      required:
+      - id
+    ForumAuthorRequest:
+      type: object
+      properties:
+        first_name:
+          type: string
+          title: Имя
+          maxLength: 150
+        last_name:
+          type: string
+          title: Фамилия
+          maxLength: 150
+        profile:
+          $ref: '#/components/schemas/ProfileRequest'
+    ForumCategory:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Название категории
+          maxLength: 150
+        slug:
+          type: string
+          readOnly: true
+          title: Слаг
+          description: Оставьте пустым для авто-генерации
+          pattern: ^[-a-zA-Z0-9_]+$
+        description:
+          type: string
+          title: Описание
+        display_order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          title: Порядок
+        topic_count:
+          type: integer
+          readOnly: true
+        post_count:
+          type: integer
+          readOnly: true
+      required:
+      - id
+      - name
+      - post_count
+      - slug
+      - topic_count
+    ForumCategoryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Название категории
+          maxLength: 150
+        description:
+          type: string
+          title: Описание
+        display_order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          title: Порядок
+      required:
+      - name
+    ForumPost:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        author:
+          allOf:
+          - $ref: '#/components/schemas/ForumAuthor'
+          readOnly: true
+        content:
+          type: string
+          title: Текст сообщения
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Создано
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Обновлено
+        topic_id_read:
+          type: integer
+          readOnly: true
+        replies:
+          type: string
+          readOnly: true
+        likes_count:
+          type: integer
+          readOnly: true
+        is_liked_by_current_user:
+          type: boolean
+          readOnly: true
+      required:
+      - author
+      - content
+      - created_at
+      - id
+      - is_liked_by_current_user
+      - likes_count
+      - replies
+      - topic_id_read
+      - updated_at
+    ForumPostRequest:
+      type: object
+      properties:
+        content:
+          type: string
+          minLength: 1
+          title: Текст сообщения
+        topic:
+          type: integer
+          writeOnly: true
+        parent_id:
+          type: integer
+          writeOnly: true
+          nullable: true
+      required:
+      - content
+      - topic
+    ForumTopic:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        category:
+          allOf:
+          - $ref: '#/components/schemas/ForumCategory'
+          readOnly: true
+        title:
+          type: string
+          title: Заголовок темы
+          maxLength: 255
+        author:
+          allOf:
+          - $ref: '#/components/schemas/ForumAuthor'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Создано
+        last_post_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Последний пост
+        is_pinned:
+          type: boolean
+          title: Закреплена
+        is_closed:
+          type: boolean
+          title: Закрыта
+        tags:
+          type: array
+          items:
+            type: string
+        post_count:
+          type: integer
+          readOnly: true
+        last_post:
+          type: string
+          readOnly: true
+      required:
+      - author
+      - category
+      - created_at
+      - id
+      - last_post
+      - last_post_at
+      - post_count
+      - title
+    ForumTopicList:
+      type: object
+      description: Упрощенный сериализатор для списков тем.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        category_name:
+          type: string
+          readOnly: true
+        title:
+          type: string
+          readOnly: true
+          title: Заголовок темы
+        author_name:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Создано
+        last_post_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Последний пост
+        is_pinned:
+          type: boolean
+          readOnly: true
+          title: Закреплена
+        is_closed:
+          type: boolean
+          readOnly: true
+          title: Закрыта
+        tags:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        post_count:
+          type: integer
+          readOnly: true
+        last_post_author_name:
+          type: string
+          nullable: true
+          readOnly: true
+      required:
+      - author_name
+      - category_name
+      - created_at
+      - id
+      - is_closed
+      - is_pinned
+      - last_post_at
+      - last_post_author_name
+      - post_count
+      - tags
+      - title
+    ForumTopicRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          title: Заголовок темы
+          maxLength: 255
+        is_pinned:
+          type: boolean
+          title: Закреплена
+        is_closed:
+          type: boolean
+          title: Закрыта
+        tags:
+          type: array
+          items:
+            type: string
+            minLength: 1
+      required:
+      - title
+    InvitationCode:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        code:
+          type: string
+          readOnly: true
+          title: Код
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          title: Назначенная роль
+        created_by:
+          type: integer
+          readOnly: true
+        created_by_email:
+          type: string
+          format: email
+          readOnly: true
+        used_by:
+          type: integer
+          readOnly: true
+          nullable: true
+        used_by_email:
+          type: string
+          format: email
+          readOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        expires_at:
+          type: string
+          format: date-time
+          nullable: true
+          title: Истекает
+        is_valid:
+          type: string
+          readOnly: true
+      required:
+      - code
+      - created_at
+      - created_by
+      - created_by_email
+      - id
+      - is_valid
+      - role
+      - used_by
+      - used_by_email
+    InvitationCodeRequest:
+      type: object
+      properties:
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          title: Назначенная роль
+        expires_at:
+          type: string
+          format: date-time
+          nullable: true
+          title: Истекает
+      required:
+      - role
+    Lesson:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        subject:
+          allOf:
+          - $ref: '#/components/schemas/Subject'
+          readOnly: true
+        teacher:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        group:
+          allOf:
+          - $ref: '#/components/schemas/StudentGroup'
+          readOnly: true
+        classroom:
+          allOf:
+          - $ref: '#/components/schemas/Classroom'
+          readOnly: true
+          nullable: true
+        lesson_type:
+          allOf:
+          - $ref: '#/components/schemas/LessonTypeEnum'
+          title: Тип занятия
+        start_time:
+          type: string
+          format: date-time
+          title: Время начала
+        end_time:
+          type: string
+          format: date-time
+          title: Время окончания
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        created_by:
+          type: integer
+          readOnly: true
+          nullable: true
+          title: Кем создано
+      required:
+      - classroom
+      - created_at
+      - created_by
+      - end_time
+      - group
+      - id
+      - start_time
+      - subject
+      - teacher
+      - updated_at
+    LessonRequest:
+      type: object
+      properties:
+        lesson_type:
+          allOf:
+          - $ref: '#/components/schemas/LessonTypeEnum'
+          title: Тип занятия
+        start_time:
+          type: string
+          format: date-time
+          title: Время начала
+        end_time:
+          type: string
+          format: date-time
+          title: Время окончания
+        subject_id:
+          type: integer
+          writeOnly: true
+        teacher_id:
+          type: integer
+          writeOnly: true
+        group_id:
+          type: integer
+          writeOnly: true
+        classroom_id:
+          type: integer
+          writeOnly: true
+          nullable: true
+      required:
+      - end_time
+      - group_id
+      - start_time
+      - subject_id
+      - teacher_id
+    LessonTypeEnum:
+      enum:
+      - LECTURE
+      - PRACTICE
+      - SEMINAR
+      - LAB
+      - EXAM
+      - CONSULTATION
+      - OTHER
+      type: string
+      description: |-
+        * `LECTURE` - Лекция
+        * `PRACTICE` - Практика
+        * `SEMINAR` - Семинар
+        * `LAB` - Лабораторная работа
+        * `EXAM` - Экзамен/Зачет
+        * `CONSULTATION` - Консультация
+        * `OTHER` - Другое
+    LogResponse:
+      type: object
+      properties:
+        log_alias:
+          type: string
+        lines:
+          type: array
+          items:
+            type: string
+      required:
+      - lines
+      - log_alias
+    Message:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        chat_id:
+          type: integer
+          readOnly: true
+        sender:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        content:
+          type: string
+          nullable: true
+          title: Текст сообщения
+        file_url:
+          type: string
+          readOnly: true
+        timestamp:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Время отправки
+      required:
+      - chat_id
+      - file_url
+      - id
+      - sender
+      - timestamp
+    MessageRequest:
+      type: object
+      properties:
+        chat:
+          type: integer
+          writeOnly: true
+        content:
+          type: string
+          nullable: true
+          title: Текст сообщения
+        file:
+          type: string
+          format: binary
+          writeOnly: true
+          nullable: true
+          title: Файл
+      required:
+      - chat
+    NewsArticle:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          title: Заголовок
+          maxLength: 255
+        content:
+          type: string
+          title: Содержание
+        category:
+          allOf:
+          - $ref: '#/components/schemas/NewsCategory'
+          readOnly: true
+        author:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Создано
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Обновлено
+        is_published:
+          type: boolean
+          title: Опубликовано
+        comment_count:
+          type: integer
+          readOnly: true
+        likes_count:
+          type: integer
+          readOnly: true
+        is_liked_by_current_user:
+          type: string
+          readOnly: true
+      required:
+      - author
+      - category
+      - comment_count
+      - content
+      - created_at
+      - id
+      - is_liked_by_current_user
+      - likes_count
+      - title
+      - updated_at
+    NewsArticleRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          title: Заголовок
+          maxLength: 255
+        content:
+          type: string
+          minLength: 1
+          title: Содержание
+        is_published:
+          type: boolean
+          title: Опубликовано
+        category_id:
+          type: integer
+          writeOnly: true
+          nullable: true
+      required:
+      - content
+      - title
+    NewsCategory:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Название категории
+          maxLength: 100
+        slug:
+          type: string
+          readOnly: true
+          title: Слаг
+          description: Оставьте пустым для авто-генерации
+          pattern: ^[-a-zA-Z0-9_]+$
+        description:
+          type: string
+          title: Описание
+      required:
+      - id
+      - name
+      - slug
+    NewsCategoryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Название категории
+          maxLength: 100
+        description:
+          type: string
+          title: Описание
+      required:
+      - name
+    NewsComment:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        author:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        content:
+          type: string
+          title: Текст комментария
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Создано
+        replies:
+          type: string
+          readOnly: true
+        likes_count:
+          type: integer
+          readOnly: true
+        is_liked_by_current_user:
+          type: string
+          readOnly: true
+      required:
+      - author
+      - content
+      - created_at
+      - id
+      - is_liked_by_current_user
+      - likes_count
+      - replies
+    NewsCommentRequest:
+      type: object
+      properties:
+        article:
+          type: integer
+          writeOnly: true
+          title: Статья
+        content:
+          type: string
+          minLength: 1
+          title: Текст комментария
+        parent:
+          type: integer
+          writeOnly: true
+          nullable: true
+          title: Ответ на
+      required:
+      - article
+      - content
+    Notification:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        recipient:
+          type: integer
+          readOnly: true
+          title: Получатель
+        message:
+          type: string
+          readOnly: true
+          title: Текст уведомления
+        notification_type:
+          allOf:
+          - $ref: '#/components/schemas/NotificationTypeEnum'
+          readOnly: true
+          title: Тип уведомления
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Создано
+        is_read:
+          type: boolean
+          title: Прочитано
+        content_type:
+          type: integer
+          readOnly: true
+          nullable: true
+        object_id:
+          type: integer
+          readOnly: true
+          nullable: true
+      required:
+      - content_type
+      - created_at
+      - id
+      - message
+      - notification_type
+      - object_id
+      - recipient
+    NotificationRequest:
+      type: object
+      properties:
+        is_read:
+          type: boolean
+          title: Прочитано
+    NotificationTypeEnum:
+      enum:
+      - NEWS
+      - SCHEDULE
+      - MESSAGE
+      - FORUM
+      - SYSTEM
+      type: string
+      description: |-
+        * `NEWS` - Новость
+        * `SCHEDULE` - Расписание
+        * `MESSAGE` - Сообщение
+        * `FORUM` - Форум
+        * `SYSTEM` - Системное
+    PatchedChangePasswordRequest:
+      type: object
+      properties:
+        old_password:
+          type: string
+          writeOnly: true
+          minLength: 1
+        new_password:
+          type: string
+          writeOnly: true
+          minLength: 1
+        new_password2:
+          type: string
+          writeOnly: true
+          minLength: 1
+    PatchedChatRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+          title: Название чата
+          description: Обязательно для групповых чатов
+          maxLength: 150
+        other_user_id:
+          type: integer
+          writeOnly: true
+          nullable: true
+        participant_ids:
+          type: array
+          items:
+            type: integer
+          writeOnly: true
+          nullable: true
+    PatchedClassroomRequest:
+      type: object
+      properties:
+        identifier:
+          type: string
+          minLength: 1
+          title: Номер/название
+          maxLength: 50
+        capacity:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          title: Вместимость
+        type:
+          allOf:
+          - $ref: '#/components/schemas/TypeEnum'
+          title: Тип аудитории
+        notes:
+          type: string
+          title: Примечания
+    PatchedForumPostRequest:
+      type: object
+      properties:
+        content:
+          type: string
+          minLength: 1
+          title: Текст сообщения
+        topic:
+          type: integer
+          writeOnly: true
+        parent_id:
+          type: integer
+          writeOnly: true
+          nullable: true
+    PatchedForumTopicRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          title: Заголовок темы
+          maxLength: 255
+        is_pinned:
+          type: boolean
+          title: Закреплена
+        is_closed:
+          type: boolean
+          title: Закрыта
+        tags:
+          type: array
+          items:
+            type: string
+            minLength: 1
+    PatchedInvitationCodeRequest:
+      type: object
+      properties:
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          title: Назначенная роль
+        expires_at:
+          type: string
+          format: date-time
+          nullable: true
+          title: Истекает
+    PatchedLessonRequest:
+      type: object
+      properties:
+        lesson_type:
+          allOf:
+          - $ref: '#/components/schemas/LessonTypeEnum'
+          title: Тип занятия
+        start_time:
+          type: string
+          format: date-time
+          title: Время начала
+        end_time:
+          type: string
+          format: date-time
+          title: Время окончания
+        subject_id:
+          type: integer
+          writeOnly: true
+        teacher_id:
+          type: integer
+          writeOnly: true
+        group_id:
+          type: integer
+          writeOnly: true
+        classroom_id:
+          type: integer
+          writeOnly: true
+          nullable: true
+    PatchedMessageRequest:
+      type: object
+      properties:
+        chat:
+          type: integer
+          writeOnly: true
+        content:
+          type: string
+          nullable: true
+          title: Текст сообщения
+        file:
+          type: string
+          format: binary
+          writeOnly: true
+          nullable: true
+          title: Файл
+    PatchedNewsArticleRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          title: Заголовок
+          maxLength: 255
+        content:
+          type: string
+          minLength: 1
+          title: Содержание
+        is_published:
+          type: boolean
+          title: Опубликовано
+        category_id:
+          type: integer
+          writeOnly: true
+          nullable: true
+    PatchedNewsCategoryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Название категории
+          maxLength: 100
+        description:
+          type: string
+          title: Описание
+    PatchedNewsCommentRequest:
+      type: object
+      properties:
+        article:
+          type: integer
+          writeOnly: true
+          title: Статья
+        content:
+          type: string
+          minLength: 1
+          title: Текст комментария
+        parent:
+          type: integer
+          writeOnly: true
+          nullable: true
+          title: Ответ на
+    PatchedStudentGroupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Название группы
+          maxLength: 100
+        curator:
+          type: integer
+          nullable: true
+          title: Куратор
+        students:
+          type: array
+          items:
+            type: integer
+            title: Студенты
+          title: Студенты
+    PatchedSubjectRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Название предмета
+          maxLength: 200
+        description:
+          type: string
+          title: Описание
+    PatchedUserNotificationSettingsRequest:
+      type: object
+      properties:
+        enable_news:
+          type: boolean
+          title: Новости
+        enable_schedule:
+          type: boolean
+          title: Расписание
+        enable_messages:
+          type: boolean
+          title: Сообщения
+        enable_forum:
+          type: boolean
+          title: Форум
+        enable_system:
+          type: boolean
+          title: Системные
+    PatchedUserRequest:
+      type: object
+      properties:
+        first_name:
+          type: string
+          title: Имя
+          maxLength: 150
+        last_name:
+          type: string
+          title: Фамилия
+          maxLength: 150
+        patronymic:
+          type: string
+          maxLength: 150
+        profile:
+          $ref: '#/components/schemas/ProfileRequest'
+    ProcessActionRequest:
+      type: object
+      properties:
+        action:
+          $ref: '#/components/schemas/ActionEnum'
+      required:
+      - action
+    ProcessActionResponse:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+      - status
+    Profile:
+      type: object
+      properties:
+        avatar:
+          type: string
+          format: uri
+          nullable: true
+          title: Аватар
+        phone_number:
+          type: string
+          title: Номер телефона
+          maxLength: 20
+        bio:
+          type: string
+          title: О себе
+        date_of_birth:
+          type: string
+          format: date
+          nullable: true
+          title: Дата рождения
+    ProfileRequest:
+      type: object
+      properties:
+        avatar:
+          type: string
+          format: binary
+          nullable: true
+          title: Аватар
+        phone_number:
+          type: string
+          title: Номер телефона
+          maxLength: 20
+        bio:
+          type: string
+          title: О себе
+        date_of_birth:
+          type: string
+          format: date
+          nullable: true
+          title: Дата рождения
+    RoleEnum:
+      enum:
+      - STUDENT
+      - TEACHER
+      - PARENT
+      - ADMIN
+      type: string
+      description: |-
+        * `STUDENT` - Студент
+        * `TEACHER` - Преподаватель
+        * `PARENT` - Родитель
+        * `ADMIN` - Администратор
+    ScheduleList:
+      type: object
+      description: Упрощенный сериализатор для отображения списков расписания.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        subject_name:
+          type: string
+          readOnly: true
+        teacher_name:
+          type: string
+          readOnly: true
+        group_name:
+          type: string
+          readOnly: true
+        classroom_name:
+          type: string
+          readOnly: true
+          nullable: true
+        lesson_type:
+          allOf:
+          - $ref: '#/components/schemas/LessonTypeEnum'
+          readOnly: true
+          title: Тип занятия
+        start_time:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Время начала
+        end_time:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Время окончания
+      required:
+      - classroom_name
+      - end_time
+      - group_name
+      - id
+      - lesson_type
+      - start_time
+      - subject_name
+      - teacher_name
+    ServiceActionResponse:
+      type: object
+      properties:
+        service:
+          type: string
+        action:
+          type: string
+        success:
+          type: boolean
+        output:
+          type: string
+        returncode:
+          type: integer
+      required:
+      - action
+      - output
+      - returncode
+      - service
+      - success
+    StudentGroup:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Название группы
+          maxLength: 100
+        curator:
+          type: integer
+          nullable: true
+          title: Куратор
+        curator_email:
+          type: string
+          format: email
+          readOnly: true
+          nullable: true
+        student_count:
+          type: string
+          readOnly: true
+        students:
+          type: array
+          items:
+            type: integer
+            title: Студенты
+          title: Студенты
+      required:
+      - curator_email
+      - id
+      - name
+      - student_count
+    StudentGroupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Название группы
+          maxLength: 100
+        curator:
+          type: integer
+          nullable: true
+          title: Куратор
+        students:
+          type: array
+          items:
+            type: integer
+            title: Студенты
+          title: Студенты
+      required:
+      - name
+    Subject:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Название предмета
+          maxLength: 200
+        description:
+          type: string
+          title: Описание
+      required:
+      - id
+      - name
+    SubjectRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Название предмета
+          maxLength: 200
+        description:
+          type: string
+          title: Описание
+      required:
+      - name
+    TokenObtainPair:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - refresh
+    TokenObtainPairRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          writeOnly: true
+          minLength: 1
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - email
+      - password
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+      required:
+      - access
+      - refresh
+    TokenRefreshRequest:
+      type: object
+      properties:
+        refresh:
+          type: string
+          minLength: 1
+      required:
+      - refresh
+    TypeEnum:
+      enum:
+      - LECTURE
+      - PRACTICE
+      - LAB
+      - COMPUTER
+      - OTHER
+      type: string
+      description: |-
+        * `LECTURE` - Лекционная
+        * `PRACTICE` - Практическая
+        * `LAB` - Лаборатория
+        * `COMPUTER` - Компьютерный класс
+        * `OTHER` - Другое
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          readOnly: true
+          title: Адрес электронной почты
+        first_name:
+          type: string
+          title: Имя
+          maxLength: 150
+        last_name:
+          type: string
+          title: Фамилия
+          maxLength: 150
+        patronymic:
+          type: string
+          maxLength: 150
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          readOnly: true
+          title: Роль
+        profile:
+          $ref: '#/components/schemas/Profile'
+        is_active:
+          type: boolean
+          readOnly: true
+          title: Активный
+          description: Отметьте, если пользователь должен считаться активным. Уберите
+            эту отметку вместо удаления учётной записи.
+        is_role_confirmed:
+          type: boolean
+          readOnly: true
+          title: Role confirmed
+        date_joined:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Дата регистрации
+      required:
+      - date_joined
+      - email
+      - id
+      - is_active
+      - is_role_confirmed
+      - role
+    UserNotificationSettings:
+      type: object
+      properties:
+        enable_news:
+          type: boolean
+          title: Новости
+        enable_schedule:
+          type: boolean
+          title: Расписание
+        enable_messages:
+          type: boolean
+          title: Сообщения
+        enable_forum:
+          type: boolean
+          title: Форум
+        enable_system:
+          type: boolean
+          title: Системные
+    UserNotificationSettingsRequest:
+      type: object
+      properties:
+        enable_news:
+          type: boolean
+          title: Новости
+        enable_schedule:
+          type: boolean
+          title: Расписание
+        enable_messages:
+          type: boolean
+          title: Сообщения
+        enable_forum:
+          type: boolean
+          title: Форум
+        enable_system:
+          type: boolean
+          title: Системные
+    UserRegistration:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          title: Адрес электронной почты
+          maxLength: 254
+        first_name:
+          type: string
+          title: Имя
+          maxLength: 150
+        last_name:
+          type: string
+          title: Фамилия
+          maxLength: 150
+        patronymic:
+          type: string
+          maxLength: 150
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          title: Роль
+      required:
+      - email
+      - first_name
+      - last_name
+      - role
+    UserRegistrationRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
+          title: Адрес электронной почты
+          maxLength: 254
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+        password2:
+          type: string
+          writeOnly: true
+          minLength: 1
+          title: Confirm password
+        first_name:
+          type: string
+          title: Имя
+          maxLength: 150
+        last_name:
+          type: string
+          title: Фамилия
+          maxLength: 150
+        patronymic:
+          type: string
+          maxLength: 150
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          title: Роль
+        invite_code:
+          type: string
+          writeOnly: true
+          nullable: true
+      required:
+      - email
+      - first_name
+      - last_name
+      - password
+      - password2
+      - role
+    UserRequest:
+      type: object
+      properties:
+        first_name:
+          type: string
+          title: Имя
+          maxLength: 150
+        last_name:
+          type: string
+          title: Фамилия
+          maxLength: 150
+        patronymic:
+          type: string
+          maxLength: 150
+        profile:
+          $ref: '#/components/schemas/ProfileRequest'
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
